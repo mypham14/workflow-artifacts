@@ -2,30 +2,32 @@ name: Tests
 
 on:
   push:
-      branches:
-            - main
-              pull_request:
-                  branches:
-                        - main
-                        permissions:
-                          contents: read
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
-                          jobs:
-                            coverage:
-                                name: Tests with coverage    runs-on: ubuntu-latest
-                                    steps:
-                                          - uses: actions/checkout@v6
+permissions:
+  contents: read
 
-                                                - uses: actions/setup-node@v6
-                                                        with:
-                                                                  node-version: 24
-                                                                            cache: npm
+jobs:
+  coverage:
+    name: Tests with coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-                                                                                  - run: npm ci
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
 
-                                                                                        - run: npm run test:coverage
+      - run: npm ci
 
-                                                                                              - uses: actions/upload-artifact@v7
-                                                                                                      with:
-                                                                                                                name: test-coverage-report
-                                                                                                                          path: coverage/
+      - run: npm run test:coverage
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: test-coverage-report
+          path: coverage/
